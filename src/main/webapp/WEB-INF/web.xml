@@ -5,7 +5,7 @@
     <servlet>
       <servlet-name>dispatcherServlet</servlet-name>
       <servlet-class>
-          com.chenpp.spring.servlet.CPDispatcherServlet
+          com.chenpp.spring.framework.webmvc.servlet.CPDispatcherServlet
       </servlet-class>
 
       <init-param>

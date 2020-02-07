@@ -1,6 +1,9 @@
 package com.chenpp.spring.framework.beans.support;
 
+import com.chenpp.spring.framework.annotation.CPController;
+import com.chenpp.spring.framework.annotation.CPService;
 import com.chenpp.spring.framework.beans.config.CPBeanDefinition;
+import com.chenpp.spring.framework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,8 +54,8 @@ public class CPBeanDefinitionReader {
     }
 
     private void doScannClasses(String scanPackage) {
-        //转换为文件路径，实际上就是把.替换为/就OK了
-        URL url = this.getClass().getClassLoader().getResource("/" + scanPackage.replaceAll("\\.","/"));
+        //转换为文件路径，实际上就是把.替换为/就OK了  对于非Web环境需要把classLoader去掉
+        URL url = this.getClass().getResource("/" + scanPackage.replaceAll("\\.","/"));
         File classPath = new File(url.getFile());
         for (File file : classPath.listFiles()) {
             if(file.isDirectory()){
@@ -70,15 +73,29 @@ public class CPBeanDefinitionReader {
      */
     public List<CPBeanDefinition> loadBeanDefinitions(){
 
-
         List<CPBeanDefinition> beanDefinitions = new ArrayList<>();
         try {
             for( String className : registyBeanClasses){
-                Class clazz = Class.forName(className);
-                if(clazz.isInterface()){continue;}
-                CPBeanDefinition beanDefinition = doCreateBeanDefinition(toLowerFirstCase(clazz.getSimpleName()),className);
-                if(beanDefinition != null){
-                    beanDefinitions.add(beanDefinition);
+                Class<?> beanClass = Class.forName(className);
+                if(beanClass.isInterface()) { continue; }
+                //beanName有三种情况: 1)自定义名字 2)默认是类名首字母小写 3)接口注入
+
+                //对于添加了CPController和CPService注解,判断是否有定义好的beanName
+                String beanName = StringUtils.toFirstLowChar(beanClass.getSimpleName());
+                if(beanClass.isAnnotationPresent(CPController.class) && !StringUtils.isEmpty(beanClass.getAnnotation(CPController.class).value()) ){
+                    beanName = beanClass.getAnnotation(CPController.class).value();
+                }else if(beanClass.isAnnotationPresent(CPService.class) && !StringUtils.isEmpty(beanClass.getAnnotation(CPService.class).value())){
+                    beanName = beanClass.getAnnotation(CPService.class).value();
+                }
+
+                CPBeanDefinition beanDefinition = doCreateBeanDefinition(beanName,className,false);
+                beanDefinitions.add(beanDefinition);
+                //如果是实现类,因为我们不会在接口上加注解,所以使用接口名来定义beanName,对应的BeanDefinition还是实现类的
+                Class<?> [] interfaces = beanClass.getInterfaces();
+                for (Class<?> i : interfaces) {
+                    //如果是多个实现类，只能覆盖
+                    //这个时候，可以自定义名字
+                    beanDefinitions.add(doCreateBeanDefinition(i.getName(),beanClass.getName(),true));
                 }
             }
         } catch (Exception e) {
@@ -90,18 +107,14 @@ public class CPBeanDefinitionReader {
 
 
     //把每一个配信息解析成一个BeanDefinition
-    private CPBeanDefinition doCreateBeanDefinition(String factoryBeanName,String beanClassName){
+    private CPBeanDefinition doCreateBeanDefinition(String factoryBeanName,String beanClassName , boolean isAbstract){
         CPBeanDefinition beanDefinition = new CPBeanDefinition();
         beanDefinition.setBeanClassName(beanClassName);
         beanDefinition.setFactoryBeanName(factoryBeanName);
+        beanDefinition.setAbstract(isAbstract);
         return beanDefinition;
     }
 
 
-    private String toLowerFirstCase(String simpleName) {
-        char [] chars = simpleName.toCharArray();
-        //大小写字母的ASCII码相差32, 而且大写字母的ASCII码要小于小写字母的ASCII码
-        chars[0] += 32;
-        return String.valueOf(chars);
-    }
+
 }

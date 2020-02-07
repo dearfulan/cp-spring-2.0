@@ -10,4 +10,7 @@ public interface CPBeanFactory {
      * 根据bean的名字，获取在IOC容器中得到bean实例
      */
     public Object getBean(String name) throws Exception;
+
+    public <T> T  getBean(Class<?> beanClass) throws Exception;
+
 }

@@ -8,9 +8,21 @@ public class CPBeanDefinition {
 
     private String beanClassName;
 
-    private boolean lazyInit;
+    private boolean lazyInit = false;
+
+    private boolean singleton = true;
 
     private String factoryBeanName;
+
+    private boolean abstractFlag;
+
+    public boolean isAbstract() {
+        return abstractFlag;
+    }
+
+    public void setAbstract(boolean abstractFlag) {
+        this.abstractFlag = abstractFlag;
+    }
 
     public String getBeanClassName() {
         return beanClassName;
@@ -34,5 +46,13 @@ public class CPBeanDefinition {
 
     public void setFactoryBeanName(String factoryBeanName) {
         this.factoryBeanName = factoryBeanName;
+    }
+
+    public boolean isSingleton() {
+        return singleton;
+    }
+
+    public void setSingleton(boolean singleton) {
+        this.singleton = singleton;
     }
 }

@@ -1,9 +1,9 @@
 package com.chenpp.spring.framework.context.support;
 
-import com.chenpp.spring.framework.beans.CPBeanFactory;
 import com.chenpp.spring.framework.beans.config.CPBeanDefinition;
 import com.chenpp.spring.framework.beans.support.CPBeanDefinitionReader;
 import com.chenpp.spring.framework.beans.support.CPDefaultListableBeanFactory;
+import com.chenpp.spring.framework.beans.support.CPListableBeanFactory;
 import com.chenpp.spring.framework.context.CPApplicationContext;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * 2020/2/6
  * created by chenpp
  */
-public abstract class CPAbstractApplicationContext implements CPApplicationContext {
+public abstract class CPAbstractApplicationContext implements CPApplicationContext , CPListableBeanFactory {
 
     private String[] configLocations;
 
@@ -47,6 +47,17 @@ public abstract class CPAbstractApplicationContext implements CPApplicationConte
 
     }
 
+    @Override
+    public String[] getBeanNamesForType(Class<?> type){
+        return getBeanFactory().getBeanNamesForType(type);
+    }
+
+    @Override
+    public String[] getBeanDefinitionNames() {
+        return getBeanFactory().getBeanDefinitionNames();
+    }
+
+
     protected void finishBeanFactoryInitialization(){
         try {
             this.beanFactory.preInstantiateSingletons();
@@ -68,7 +79,7 @@ public abstract class CPAbstractApplicationContext implements CPApplicationConte
      * spring中这个的实现类是其他的AbstractApplicationContext的子类，这里就不写的这么复杂了
      */
     @Override
-    public CPBeanFactory getBeanFactory() {
+    public CPListableBeanFactory getBeanFactory() {
         return this.beanFactory;
     }
 
@@ -77,6 +88,11 @@ public abstract class CPAbstractApplicationContext implements CPApplicationConte
     @Override
     public Object getBean(String name) throws Exception {
        return  getBeanFactory().getBean(name);
+    }
+
+    @Override
+    public <T> T getBean(Class<?> requiredType) throws Exception {
+        return getBeanFactory().getBean(requiredType);
     }
 
     protected CPDefaultListableBeanFactory createBeanFactory() {

@@ -8,7 +8,7 @@ package com.chenpp.spring.framework.context.support;
  */
 public class CPClassPathXmlApplicationContext extends  CPAbstractApplicationContext{
 
-    public CPClassPathXmlApplicationContext( String[] configLocations) {
+    public CPClassPathXmlApplicationContext( String... configLocations) {
         super(configLocations);
         try {
             refresh();
