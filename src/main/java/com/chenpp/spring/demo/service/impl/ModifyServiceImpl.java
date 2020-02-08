@@ -29,7 +29,7 @@ public class ModifyServiceImpl implements IModifyService {
 	 * 删除
 	 */
 	public String remove(Integer id) {
-		return "modifyService id=" + id;
+		return "modifyService delete , id=" + id;
 	}
 	
 }

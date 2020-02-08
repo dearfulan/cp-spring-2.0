@@ -1,6 +1,9 @@
 package com.chenpp.spring.framework.context;
 
 import com.chenpp.spring.framework.beans.CPBeanFactory;
+import com.chenpp.spring.framework.beans.support.CPListableBeanFactory;
+
+import java.util.Properties;
 
 
 /**
@@ -11,6 +14,9 @@ import com.chenpp.spring.framework.beans.CPBeanFactory;
 public interface CPApplicationContext extends  CPBeanFactory {
 
 
-    CPBeanFactory getBeanFactory() throws IllegalStateException;
+    CPListableBeanFactory getBeanFactory() throws IllegalStateException;
+
+    Properties getConfig() ;
+
 
 }

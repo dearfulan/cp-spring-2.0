@@ -7,6 +7,7 @@ import com.chenpp.spring.framework.beans.support.CPListableBeanFactory;
 import com.chenpp.spring.framework.context.CPApplicationContext;
 
 import java.util.List;
+import java.util.Properties;
 
 
 /**
@@ -45,6 +46,10 @@ public abstract class CPAbstractApplicationContext implements CPApplicationConte
         finishBeanFactoryInitialization();
 
 
+    }
+
+    public Properties getConfig(){
+       return  reader.getConfig();
     }
 
     @Override

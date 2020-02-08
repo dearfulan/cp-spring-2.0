@@ -16,6 +16,7 @@ import java.util.Properties;
 /**
  * 2020/2/6
  * created by chenpp
+ * 用于加载配置信息
  */
 public class CPBeanDefinitionReader {
 
@@ -113,6 +114,14 @@ public class CPBeanDefinitionReader {
         beanDefinition.setFactoryBeanName(factoryBeanName);
         beanDefinition.setAbstract(isAbstract);
         return beanDefinition;
+    }
+
+    /**
+     * 提供接口供外部访问获取配置信息
+     *
+     * */
+    public Properties getConfig(){
+        return this.config;
     }
 
 
