@@ -1,7 +1,7 @@
 package com.chenpp.spring.demo.controller;
 
-import com.chenpp.spring.demo.service.impl.ModifyServiceImpl;
-import com.chenpp.spring.demo.service.impl.QueryServiceImpl;
+import com.chenpp.spring.demo.service.IModifyService;
+import com.chenpp.spring.demo.service.IQueryService;
 import com.chenpp.spring.framework.annotation.*;
 import com.chenpp.spring.framework.web.servlet.CPModel;
 import com.chenpp.spring.framework.web.servlet.CPModelAndView;
@@ -21,9 +21,9 @@ import java.io.IOException;
 public class MyController {
 
 	@CPAutowire
-	QueryServiceImpl queryService;
+	IQueryService queryService;
 	@CPAutowire
-	ModifyServiceImpl modifyService;
+	IModifyService modifyService;
 
 	@CPRequestMapping("/query.json")
 	public String query(CPModel model, HttpServletRequest request, HttpServletResponse response, @CPRequestParam("name") String name){
@@ -31,17 +31,10 @@ public class MyController {
 		model.addAttribute("name",name);
 		return "show";
 	}
-
-	@CPRequestMapping("/show")
-	public CPModel query( @CPRequestParam("name") String name){
-		CPModel model = new CPModelMap();
-		model.addAttribute("name","chenpp");
-		return model;
-	}
 	
 	@CPRequestMapping("/add*.json")
 	public CPModelAndView add(HttpServletRequest request, HttpServletResponse response,
-							  @CPRequestParam("name") String name, @CPRequestParam("addr") String addr){
+							  @CPRequestParam("name") String name, @CPRequestParam("addr") String addr) throws Exception {
 		modifyService.add(name,addr);
 		CPModelAndView modelAndView = new CPModelAndView();
 		modelAndView.setViewName("add.html");

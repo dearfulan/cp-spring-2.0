@@ -1,6 +1,7 @@
 package com.chenpp.spring.framework.context.support;
 
 
+import com.chenpp.spring.framework.beans.support.CPBeanDefinitionReader;
 
 /**
  * 2020/2/6
@@ -17,5 +18,9 @@ public class CPClassPathXmlApplicationContext extends  CPAbstractApplicationCont
         }
     }
 
+    @Override
+    public CPBeanDefinitionReader getReader() {
+        return super.reader;
+    }
 
 }

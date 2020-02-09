@@ -3,7 +3,6 @@ package com.chenpp.spring.test;
 import com.chenpp.spring.demo.controller.MyController;
 import com.chenpp.spring.demo.service.IModifyService;
 import com.chenpp.spring.demo.service.IQueryService;
-import com.chenpp.spring.demo.service.impl.ModifyServiceImpl;
 import com.chenpp.spring.demo.service.impl.QueryServiceImpl;
 import com.chenpp.spring.framework.context.support.CPClassPathXmlApplicationContext;
 
@@ -19,11 +18,12 @@ public class SpringTest {
         try {
             MyController myController = (MyController) context.getBean("myController");
             System.out.println(myController);
-            IModifyService modifyService = (ModifyServiceImpl) context.getBean("modifyService");
+            System.out.println("=========================================");
+            IModifyService modifyService = (IModifyService) context.getBean("modifyService");
             System.out.println(modifyService);
-
+            System.out.println("=========================================");
             System.out.println(modifyService.edit(1,"chnm"));
-            IQueryService queryService = (QueryServiceImpl) context.getBean(QueryServiceImpl.class);
+            IQueryService queryService = (IQueryService) context.getBean(QueryServiceImpl.class);
             System.out.println(queryService);
         } catch (Exception e) {
             e.printStackTrace();

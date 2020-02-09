@@ -20,7 +20,7 @@ public abstract class CPAbstractApplicationContext implements CPApplicationConte
 
     private CPDefaultListableBeanFactory beanFactory;
 
-    private CPBeanDefinitionReader reader;
+    protected CPBeanDefinitionReader reader;
 
     public CPAbstractApplicationContext(String... configLocations){
         this.configLocations = configLocations;
@@ -36,14 +36,21 @@ public abstract class CPAbstractApplicationContext implements CPApplicationConte
 
         reader = new CPBeanDefinitionReader(this.beanFactory,configLocations);
 
+        beanFactory.setReader(reader);
+
         //2.把它们封装成BeanDefinition
         List<CPBeanDefinition> beanDefinitions = reader.loadBeanDefinitions();
 
         //3.注册，把配置信息放到容器里面(伪IOC容器实际是BeanDefinition的Map)
         doRegisterBeanDefinition(beanDefinitions);
 
-        //4.判断是否是延时加载的类，不是的话就提前进行初始化
+        //4.初始化BeanPostProcessor
+        initBeanPostProcessors();
+
+        //5.判断是否是延时加载的类，不是的话就提前进行初始化
         finishBeanFactoryInitialization();
+
+
 
 
     }
@@ -66,6 +73,13 @@ public abstract class CPAbstractApplicationContext implements CPApplicationConte
     protected void finishBeanFactoryInitialization(){
         try {
             this.beanFactory.preInstantiateSingletons();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    protected void initBeanPostProcessors(){
+        try {
+            this.beanFactory.initBeanPostProcessors();
         } catch (Exception e) {
             e.printStackTrace();
         }

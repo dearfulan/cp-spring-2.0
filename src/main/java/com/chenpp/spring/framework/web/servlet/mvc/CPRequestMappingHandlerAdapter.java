@@ -36,9 +36,13 @@ public class CPRequestMappingHandlerAdapter implements CPHandlerAdapter {
 
         //2.根据request的参数,获取方法的实参
         Object[] args = getRequestArgs(paramIndexMapping,method,request,response);
-
-        //3.执行方法获得返回值
-        Object returnValue = hm.getMethod().invoke(hm.getController(),args);
+        Object returnValue = null;
+        try{
+            //3.执行方法获得返回值
+            returnValue = hm.getMethod().invoke(hm.getController(),args);
+        }catch (Exception e){
+            throw new Exception(e.getCause());
+        }
 
         //4.根据返回的值实例化ModeAndView
         //先拿到args里的传入的Model和Map参数

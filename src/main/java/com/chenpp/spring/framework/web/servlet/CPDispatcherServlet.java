@@ -210,10 +210,10 @@ public class CPDispatcherServlet extends HttpServlet{
 		CPHandlerMapping handlerMapping = null;
 		for(CPHandlerMapping hm : handlerMappings){
 			if( hm.getPattern().matcher(url).matches()){
-				handlerMapping = hm;
+				return hm;
 			}
 		}
-		return handlerMapping;
+		return null;
 	}
 
 	private CPHandlerAdapter getHandlerAdapter(Object handler) throws ServletException {

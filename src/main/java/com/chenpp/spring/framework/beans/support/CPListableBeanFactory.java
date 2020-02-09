@@ -11,4 +11,8 @@ public interface CPListableBeanFactory extends CPBeanFactory {
     String[] getBeanDefinitionNames();
 
     String[] getBeanNamesForType(Class<?> type);
+
+    CPBeanDefinitionReader getReader();
+
+
 }
