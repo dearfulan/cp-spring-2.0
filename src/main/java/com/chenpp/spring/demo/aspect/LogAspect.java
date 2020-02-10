@@ -29,9 +29,20 @@ public class LogAspect {
         log.info("this method use time :" + (endTime - startTime));
     }
 
+    /**
+     * 在调用一个方法前后执行around方法
+     * 如果想要拿到返回值，around需要返回proceed()执行结果
+     */
+    public Object around(CPJoinpoint joinPoint) throws Throwable {
+        log.info("Invoker around before Method!!!" + "TargetObject:" +  joinPoint.getThis() + "Args:" + Arrays.toString(joinPoint.getArguments()));
+        Object returnVal  = joinPoint.proceed();
+        log.info("Invoker around after Method!!!" + "TargetObject:" +  joinPoint.getThis() + "Args:" + Arrays.toString(joinPoint.getArguments()));
+        return  returnVal;
+    }
+
     public void afterReturning(CPJoinpoint joinPoint, Object  returnValue){
 
-        log.info("返回值为 :"+ returnValue);
+        log.info("Invoker afterReturning Method!!!返回值为 :"+ returnValue);
     }
 
 

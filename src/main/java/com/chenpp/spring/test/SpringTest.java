@@ -7,8 +7,6 @@ import com.chenpp.spring.demo.service.impl.MyServiceImpl;
 import com.chenpp.spring.demo.service.impl.QueryServiceImpl;
 import com.chenpp.spring.framework.context.support.CPClassPathXmlApplicationContext;
 
-import javax.sound.midi.SoundbankResource;
-
 
 /**
  * 2020/2/7

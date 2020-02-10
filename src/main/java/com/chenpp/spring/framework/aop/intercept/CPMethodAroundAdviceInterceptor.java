@@ -17,19 +17,14 @@ public class CPMethodAroundAdviceInterceptor extends CPAbstractAspectjAdvice imp
         super(aspectMethod,aspectTarget);
     }
 
-    public void after(Method method, Object[] arguments, Object target) throws Throwable {
-        invokeAdviceMethod(joinpoint, null, null);
+    public Object around(Method method, Object[] arguments, Object target) throws Throwable {
+        return invokeAdviceMethod(joinpoint, null, null);
     }
+
 
     @Override
     public Object invoke(CPMethodInvocation invocation) throws Throwable {
-        //TODO 这里的写法有问题 稍后完善  或者看看别人的
         this.joinpoint = invocation;
-        try {
-            return invocation.proceed();
-        }
-        finally {
-            this.after(invocation.getMethod(), invocation.getArguments(), invocation.getThis() );
-        }
+        return this.around(invocation.getMethod(), invocation.getArguments(), invocation.getThis());
     }
 }

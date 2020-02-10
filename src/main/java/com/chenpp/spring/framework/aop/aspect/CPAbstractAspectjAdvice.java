@@ -37,7 +37,6 @@ public abstract class CPAbstractAspectjAdvice implements CPAdvice {
                 args[i] = ex;
             }
         }
-        aspectMethod.invoke(aspectTarget,args);
-        return null;
+        return aspectMethod.invoke(aspectTarget,args);
     }
 }
