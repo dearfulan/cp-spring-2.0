@@ -127,12 +127,15 @@ public class CPAdvisedSupport {
 
     //判断当前class是否满足pointcut表达式子
     public boolean isClassPointcutMatch(){
-        return pointCutClassPattern.matcher(this.getTargetClass().toString()).matches();
+        return pointCutClassPattern != null && pointCutClassPattern.matcher(this.getTargetClass().toString()).matches();
     }
 
     public void parseAdvise(){
         String pointcutExpress = this.getConfig().getPointCut();
         //关于这里的正则解析,感觉有奇怪的地方,后面再看吧
+        if( pointcutExpress == null){
+            return ;
+        }
         String pointCut = pointcutExpress
                 .replaceAll("\\.", "\\\\.")
                 .replaceAll("\\\\.\\*", ".*")

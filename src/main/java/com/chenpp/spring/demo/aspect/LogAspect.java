@@ -26,7 +26,7 @@ public class LogAspect {
         log.info("Invoker After Method!!!" + "TargetObject:" +  joinPoint.getThis() + "Args:" + Arrays.toString(joinPoint.getArguments()));
         long startTime = (Long) joinPoint.getUserAttribute("startTime_" + joinPoint.getMethod().getName());
         long endTime = System.currentTimeMillis();
-        System.out.println("use time :" + (endTime - startTime));
+        log.info("this method use time :" + (endTime - startTime));
     }
 
     public void afterReturning(CPJoinpoint joinPoint, Object  returnValue){

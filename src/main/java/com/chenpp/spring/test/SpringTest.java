@@ -3,8 +3,11 @@ package com.chenpp.spring.test;
 import com.chenpp.spring.demo.controller.MyController;
 import com.chenpp.spring.demo.service.IModifyService;
 import com.chenpp.spring.demo.service.IQueryService;
+import com.chenpp.spring.demo.service.impl.MyServiceImpl;
 import com.chenpp.spring.demo.service.impl.QueryServiceImpl;
 import com.chenpp.spring.framework.context.support.CPClassPathXmlApplicationContext;
+
+import javax.sound.midi.SoundbankResource;
 
 
 /**
@@ -18,13 +21,15 @@ public class SpringTest {
         try {
             MyController myController = (MyController) context.getBean("myController");
             System.out.println(myController);
+            MyServiceImpl myService = (MyServiceImpl) context.getBean("myService");
+            System.out.println(myService.test("cglib"));
             System.out.println("=========================================");
             IModifyService modifyService = (IModifyService) context.getBean("modifyService");
-            System.out.println(modifyService);
+
+            System.out.println(modifyService.add("chenp","beijing"));
             System.out.println("=========================================");
-            System.out.println(modifyService.edit(1,"chnm"));
             IQueryService queryService = (IQueryService) context.getBean(QueryServiceImpl.class);
-            System.out.println(queryService);
+            queryService.query("chenpp");
         } catch (Exception e) {
             e.printStackTrace();
         }

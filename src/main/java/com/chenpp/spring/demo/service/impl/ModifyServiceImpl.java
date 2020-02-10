@@ -1,9 +1,12 @@
 package com.chenpp.spring.demo.service.impl;
 
 import com.chenpp.spring.demo.service.IModifyService;
+import com.chenpp.spring.demo.service.IQueryService;
+import com.chenpp.spring.framework.annotation.CPAutowire;
 import com.chenpp.spring.framework.annotation.CPService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.sound.midi.SoundbankResource;
 
 /**
  * 增删改业务
@@ -13,6 +16,11 @@ import javax.sound.midi.SoundbankResource;
 @CPService("modifyService")
 public class ModifyServiceImpl implements IModifyService {
 
+	private Logger log = LoggerFactory.getLogger(ModifyServiceImpl.class);
+
+//	@CPAutowire
+//	private IQueryService queryService;
+
 	/**
 	 * 增加
 	 */
@@ -20,6 +28,8 @@ public class ModifyServiceImpl implements IModifyService {
 		if( name == null){
 			throw new Exception("这是故意抛出的异常");
 		}
+		//queryService.query(name);
+		log.info("这是在执行modify的add方法....");
 		return "modifyService add,name=" + name + ",addr=" + addr;
 	}
 

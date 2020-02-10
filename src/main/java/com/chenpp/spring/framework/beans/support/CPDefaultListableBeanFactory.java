@@ -53,6 +53,7 @@ public class CPDefaultListableBeanFactory extends CPAbstractBeanFactory implemen
     @Override
     public void registerBeanDefinition(String beanName, CPBeanDefinition beanDefinition) throws Exception {
         beanDefinitionMap.put(beanName,beanDefinition);
+        beanDefinitionMap.put(beanDefinition.getBeanClassName(),beanDefinition);
         this.beanDefinitionNames.add(beanName);
 
     }

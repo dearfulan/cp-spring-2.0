@@ -5,6 +5,7 @@ import com.chenpp.spring.framework.annotation.CPController;
 import com.chenpp.spring.framework.annotation.CPQualifier;
 import com.chenpp.spring.framework.annotation.CPService;
 import com.chenpp.spring.framework.aop.config.CPAopConfig;
+import com.chenpp.spring.framework.aop.intercept.CPJoinpoint;
 import com.chenpp.spring.framework.aop.proxy.*;
 import com.chenpp.spring.framework.beans.config.CPBeanDefinition;
 import com.chenpp.spring.framework.beans.config.CPBeanPostProcessor;
@@ -56,8 +57,7 @@ public abstract class CPAbstractBeanFactory implements  CPListableBeanFactory{
         //3.实例化得到BeanWrapper
         Object bean =  instantiateBean(beanName,beanDefinition);
         CPBeanWrapper beanWrapper = new CPBeanWrapper(bean);
-
-        //TODO 如果是循环依赖注入怎么办 ??
+        beanWrapper.setWrappedClass(Class.forName(beanDefinition.getBeanClassName()));
 
         //4、注入
         populateBean(beanName,beanDefinition, beanWrapper);
@@ -118,7 +118,7 @@ public abstract class CPAbstractBeanFactory implements  CPListableBeanFactory{
             if(fieldInstance == null && getBeanDefinition(fieldBeanName) != null){
                 fieldInstance = instantiateBean(fieldBeanName,getBeanDefinition(fieldBeanName));
             }
-            field.set(instance , factoryBeanObjectCache.get(fieldBeanName));
+            field.set(instance , fieldInstance);
 
         }
 
@@ -137,7 +137,7 @@ public abstract class CPAbstractBeanFactory implements  CPListableBeanFactory{
                     //创建代理对象
                     Object proxy ;
                     CPAdvisedSupport config = initAdvised(instance);
-                    if(config.isClassPointcutMatch()){
+                    if(config != null && config.isClassPointcutMatch()){
                         instance =  createAopProxy(config).getProxy(instance.getClass().getClassLoader());
                     }
                     factoryBeanObjectCache.put(beanName,instance);
@@ -159,6 +159,9 @@ public abstract class CPAbstractBeanFactory implements  CPListableBeanFactory{
         //读取配置文件获得aop的配置
         CPAopConfig aopConfig = new CPAopConfig();
         Properties properties = this.getReader().getConfig();
+        if(StringUtils.isEmpty(properties.getProperty("pointCut")) || StringUtils.isEmpty(properties.getProperty("aspectClass")) ){
+            return null;
+        }
         aopConfig.setPointCut(properties.getProperty("pointCut"));
         aopConfig.setAspectClass(properties.getProperty("aspectClass"));
         aopConfig.setBeforeMethod(properties.getProperty("beforeMethod"));
